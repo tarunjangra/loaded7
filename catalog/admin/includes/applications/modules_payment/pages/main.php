@@ -39,6 +39,18 @@
         <tr>
           <th colspan="4">&nbsp;</th>
         </tr>
+       <!--  <tr>
+          <th colspan="4">ddddd<?php
+          
+          //require_once('D:/wamp/www/private/Loaded7-Work/D909/loaded7/catalog/admin/includes/functions/cfg_parameters/lc_cfg_set_currencies_pulldown_menu.php');
+          
+
+          
+          //lc_cfg_set_currencies_pulldown_menu();
+
+
+          ?></th>
+        </tr> -->
       </tfoot>
     </table>
     </form>

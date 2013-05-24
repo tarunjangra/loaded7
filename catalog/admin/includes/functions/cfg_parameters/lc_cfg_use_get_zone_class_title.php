@@ -24,6 +24,6 @@
     $Qclass->bindInt(':geo_zone_id', $id);
     $Qclass->execute();
 
-    return $Qclass->value('geo_zone_name');
+return $Qclass->value('geo_zone_name');
   }
 ?>
