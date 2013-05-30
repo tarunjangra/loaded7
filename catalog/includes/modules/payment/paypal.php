@@ -88,22 +88,12 @@ class lC_Payment_paypal extends lC_Payment {
       $this->order_status = 0;
     } 
 
-    if (is_object($order)) $this->update_status();
- 
+    if (is_object($order)) $this->update_status();    
     if (defined('MODULE_PAYMENT_PAYPAL_TEST_MODE') && MODULE_PAYMENT_PAYPAL_TEST_MODE == '1') {
       $this->form_action_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';  // sandbox url
-      //$this->_paypal_standard_params();  // sandbox url
     } else {
-      //$this->form_action_url = 'https://www.paypal.com/cgi-bin/webscr';  // production url
-      $this->form_action_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';  // sandbox url
-      $this->_paypal_standard_params();  // production url
-    }
-    //$this->form_action_url = lc_href_link(FILENAME_CHECKOUT, 'payment_template', 'SSL', true, true, true) ; 
-
-    //$this->cc_explain_url = lc_href_link(FILENAME_PAYPAL_INFO, '', 'SSL');
-
-
-    
+      $this->form_action_url = 'https://www.paypal.com/cgi-bin/webscr';  // production url
+    }    
   
   }
  /**
@@ -182,6 +172,7 @@ class lC_Payment_paypal extends lC_Payment {
   * @return string
   */ 
   public function process_button() {
+    echo $this->_paypal_standard_params();
     return false;
   }
 
@@ -192,9 +183,7 @@ class lC_Payment_paypal extends lC_Payment {
   * @return string
   */ 
   private function _paypal_standard_params() {
-    global $lC_Language, $lC_ShoppingCart, $lC_Currencies, $lC_Customer;
-
-  
+    global $lC_Language, $lC_ShoppingCart, $lC_Currencies, $lC_Customer;  
 
     $upload         = 0;
     $no_shipping    = '1';
@@ -211,164 +200,56 @@ class lC_Payment_paypal extends lC_Payment {
       if ($ot['code'] == 'tax') $taxTotal = (float)$ot['value'];
     } 
 
-     print("gggg<xmp>");
-     print_r($lC_ShoppingCart->getProducts());
-     print("</xmp>");
+    $shoppingcart_products = $lC_ShoppingCart->getProducts();
+    $amount = $lC_Currencies->formatRaw($lC_ShoppingCart->getTotal(), $lC_Currencies->getCode());
 
-         //if(MODULE_PAYMENT_PAYPAL_METHOD == 'Itemized') { 
-         if(1) { 
-      $discount_amount_cart = 0;
-      $shoppingcart_products = $lC_ShoppingCart->getProducts();
+    if(MODULE_PAYMENT_PAYPAL_METHOD == 'Itemized') { 
+      $discount_amount_cart = 0;     
 
-      $paypal_standard_action_params = array(
+      $paypal_action_params = array(
         'upload' => sizeof($shoppingcart_products),
         'redirect_cmd' => '_cart',
         'handling_cart' => $shippingTotal,
         'discount_amount_cart' => $discount_amount_cart
-        ); 
-
+        );
        for ($i=1; $i<=sizeof($shoppingcart_products); $i++) {
-          $paypal_shoppingcart_products_params[] = array(
+          $paypal_shoppingcart_params = array(
             'item_name_'.$i => $shoppingcart_products[$i]['name'],
             'item_number_'.$i => $shoppingcart_products[$i]['item_id'],
             'quantity_'.$i => $shoppingcart_products[$i]['quantity'],
             'amount_'.$i => $shoppingcart_products[$i]['price'],
             'tax_'.$i => $shoppingcart_products[$i]['tax_class_id']            
             ); 
+          $paypal_action_params =  array_merge($paypal_action_params,$paypal_shoppingcart_params);
       }
-
-print("paypal_standard_action_params  : ".sizeof($shoppingcart_products));
-print("paypal_standard_action_params  : <xmp>");
-print_r($paypal_shoppingcart_products_params);
-print("</xmp>");
-
-/*
-
-    //Itemized Order Details
-        for ($i=0; $i<sizeof($order->products); $i++) {
-          $index = $i+1;
-
-           $paypal_standard_action_params = array(
-            'item_name_'.$index => sizeof($lC_ShoppingCart->getProducts()),
-            'item_number_'.$index => '_cart',
-            'quantity_'.$index => $shippingTotal,
-            'amount_'.$index => $discount_amount_cart,
-            'tax_'.$index => $discount_amount_cart            
-            ); 
-
-
- return tep_draw_hidden_field('on'.$sub_index.'_'.$index,$option).
-        tep_draw_hidden_field('os'.$sub_index.'_'.$index,$value);
-
-          //Customer Specified Product Options: PayPal Max = 2
-          if ($order->products[$i]['attributes']) {
-            for ($j=0, $n=sizeof($order->products[$i]['attributes']); $j<2; $j++) {
-              if($order->products[$i]['attributes'][$j]['option']){
-                $paypal_fields .= $this->optionSetFields($j,$index,$order->products[$i]['attributes'][$j]['option'],$order->products[$i]['attributes'][$j]['value']);
-              } else {
-                $paypal_fields .= $this->optionSetFields($j,$index);
-              }
-            }
-          } else {
-            for ($j=0; $j<2; $j++) {
-              $paypal_fields .= $this->optionSetFields($j,$index);
-            }
-          }
-------------
-          
-        }
-
-
-*/
-
-    }
-
-
-
-   /* 
-    
-  
-    if(MODULE_PAYMENT_PAYPAL_METHOD == 'Itemized') { 
-      $discount_amount_cart = 0;
-      $paypal_standard_action_params = array(
-        'upload' => sizeof($lC_ShoppingCart->getProducts()),
-        'redirect_cmd' => '_cart',
-        'handling_cart' => $shippingTotal,
-        'discount_amount_cart' => $discount_amount_cart
-        ); 
-
-
-
-
-    //Itemized Order Details
-        for ($i=0; $i<sizeof($order->products); $i++) {
-          $index = $i+1;
-
-           $paypal_standard_action_params = array(
-            'item_name_'.$index => sizeof($lC_ShoppingCart->getProducts()),
-            'item_number_'.$index => '_cart',
-            'quantity_'.$index => $shippingTotal,
-            'amount_'.$index => $discount_amount_cart,
-            'tax_'.$index => $discount_amount_cart            
-            ); 
-
-----------
- return tep_draw_hidden_field('on'.$sub_index.'_'.$index,$option).
-        tep_draw_hidden_field('os'.$sub_index.'_'.$index,$value);
-
-          //Customer Specified Product Options: PayPal Max = 2
-          if ($order->products[$i]['attributes']) {
-            for ($j=0, $n=sizeof($order->products[$i]['attributes']); $j<2; $j++) {
-              if($order->products[$i]['attributes'][$j]['option']){
-                $paypal_fields .= $this->optionSetFields($j,$index,$order->products[$i]['attributes'][$j]['option'],$order->products[$i]['attributes'][$j]['value']);
-              } else {
-                $paypal_fields .= $this->optionSetFields($j,$index);
-              }
-            }
-          } else {
-            for ($j=0; $j<2; $j++) {
-              $paypal_fields .= $this->optionSetFields($j,$index);
-            }
-          }
-------------
-          
-        }
-
-
-
-
     } else {
-      $amount = $lC_Currencies->formatRaw($lC_ShoppingCart->getTotal(), $lC_Currencies->getCode());
-      $paypal_standard_action_params = array(
+      $item_number = '';
+      for ($i=1; $i<=sizeof($shoppingcart_products); $i++) {
+        $item_number .= ' '.$shoppingcart_products[$i]['name'].' ,';
+      }
+      $item_number = substr_replace($item_number,'',-2);
+      $paypal_action_params = array(
         'item_name' => STORE_NAME,
         'redirect_cmd' => '_xclick',
+        'amount' => $amount,
         'shipping' => $shippingTotal,
-        'amount' => $amount
+        'item_number' => $item_number
         ); 
-
-        -----------$item_number = '';
-        for ($i=0; $i<sizeof($order->products); $i++) {
-          $item_number .= ' '.$order->products[$i]['name'].' ,';
-        }
-        $item_number = substr_replace($item_number,'',-2);
-        $paypal_fields .= tep_draw_hidden_field('item_number', $item_number);------------
-
-
     }
-    $return_href_link = lc_href_link(FILENAME_CHECKOUT_SUCCESS, 'success&order_id='. $this->_order_id , 'SSL', false);
-    $cancel_href_link = lc_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL', false);
-    $notify_href_link = lc_href_link(FILENAME_IPN, '', 'SSL', false);
-    $signature = (tep_not_null($txn_sign)) ? $txn_sign : $this->digest;
 
-    $paypal_standard_action_params = array(
+    $return_href_link = lc_href_link(FILENAME_CHECKOUT, 'process', 'SSL');
+    $cancel_href_link = lc_href_link(FILENAME_CHECKOUT, 'cart', 'SSL');
+    $notify_href_link = lc_href_link(FILENAME_IPN, null, 'SSL');
+    $signature = $this->setTransactionID($amount);
+
+    $paypal_standard_params = array(
         'cmd' => '_ext-enter', 
         'business' => MODULE_PAYMENT_PAYPAL_BUSINESS_ID,       
         'currency_code' => $_SESSION['currency'],
         'return' => $return_href_link,
         'cancel_return' => $cancel_href_link,
-        'notify_url' => $notify_href_link,
-        'no_shipping' => $no_shipping,        
-        'shipping' => $shipping,
+        /*'notify_url' => $notify_href_link,*/
+        'no_shipping' => $no_shipping,
         'rm' => MODULE_PAYMENT_PAYPAL_RM,
         'custom' => $signature,
         'email' => $lC_Customer->getEmailAddress(),
@@ -380,33 +261,17 @@ print("</xmp>");
         'state' => $lC_ShoppingCart->getBillingAddress('state'), 
         'zip' => $lC_ShoppingCart->getBillingAddress('postcode'),
         'lc' => $lC_ShoppingCart->getBillingAddress('country_iso_code_3'),
-        'no_note' => MODULE_PAYMENT_PAYPAL_NO_NOTE,    
+        'no_note' => (MODULE_PAYMENT_PAYPAL_NO_NOTE == 'Yes') ? '0': '1',    
         'form' => 'mage');   
-                                  
-    $response = transport::getResponse(array('url' => $paypal_standard_action_url, 'method' => 'post', 'parameters' => $paypal_standard_action_params));   
-
-    $params = substr($response, strpos($response, 'uID='));         
   
-                                  
-                                  die('317');
-    return $params;
-    */
-  }  
-
-
-
-/*
-    //Returns the gross total amount to compare with paypal.mc_gross
-    public function grossPaymentAmount($my_currency) {
-      global $order, $currencies;
-      return number_format(($order->info['total']) * $currencies->get_value($my_currency), $currencies->get_decimal_places($my_currency));
+    $paypal_standard_action_params =  array_merge($paypal_standard_params,$paypal_action_params); 
+    $paypal_params = '';
+    foreach($paypal_standard_action_params as $name => $value) {
+      $paypal_params .= lc_draw_hidden_field($name, $value);
+      //$paypal_params .= $name.lc_draw_input_field($name, $value).'<br>';
     }
-
-    public function amount($my_currency) {
-      global $order, $currencies;
-      return number_format(($order->info['total'] - $order->info['shipping_cost']) * $currencies->get_value($my_currency), $currencies->get_decimal_places($my_currency));
-    }
-*/
+    return $paypal_params;    
+  } 
   
 
  /**
@@ -420,19 +285,12 @@ print("</xmp>");
     lC_Order::process($this->_order_id, $this->order_status);
   }
 
-/*
-  public function setTransactionID() {
-      global $order, $currencies;
-      $my_currency = $_SESSION['currency'];
-      $trans_id = STORE_NAME . date('Ymdhis');
-      $this->digest = md5($trans_id . number_format($order->info['total'] * $currencies->get_value($my_currency), $currencies->get_decimal_places($my_currency), '.', '') . MODULE_PAYMENT_PAYPAL_IPN_DIGEST_KEY);
-      return $this->digest;
-    }
-
- */
-
-
-
-
+  public function setTransactionID($amount) {
+    global $lC_Language, $lC_ShoppingCart, $lC_Currencies, $lC_Customer;
+    $my_currency = $lC_Currencies->getCode();
+    $trans_id = STORE_NAME . date('Ymdhis');
+    $digest = md5($trans_id . number_format($amount * $lC_Currencies->value($my_currency), $lC_Currencies->decimalPlaces($my_currency), '.', '') . MODULE_PAYMENT_PAYPAL_IPN_DIGEST_KEY);
+    return $digest;
+  }
 }
 ?>
