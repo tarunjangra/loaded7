@@ -66,10 +66,10 @@
         }
       }
 
-      $this->types = array('Express' => 'EXPRESS',
-                           'First Class' => 'First-Class Mail',
-                           'Priority' => 'Priority',
-                           'Parcel' => 'Parcel');
+      $this->types = array('EXPRESS' => 'EXPRESS',
+                           'FIRST CLASS' => 'First-Class Mail',
+                           'PRIORITY' => 'Priority',
+                           'PARCEL' => 'Parcel');
 
       $this->intl_types = array('GXG Document' => 'Global Express Guaranteed Document Service',
                                 'GXG Non-Document' => 'Global Express Guaranteed Non-Document Service',
@@ -156,7 +156,7 @@
       global $lC_ShoppingCart;
 
       if ($lC_ShoppingCart->getShippingAddress('country_id') == SHIPPING_ORIGIN_COUNTRY) {
-        $request  = '<RateRequest USERID="' . MODULE_SHIPPING_USPS_USERID . '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">';
+        $request  = '<RateV4Request USERID="' . MODULE_SHIPPING_USPS_USERID . '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '"><Revision>2</Revision>';
         $services_count = 0;
 
         if (isset($this->service)) {
@@ -180,20 +180,21 @@
                       '</Package>';
           $services_count++;
         }
-        $request .= '</RateRequest>';
+        $request .= '</RateV4Request>';
 
-        $request = 'API=Rate&XML=' . urlencode($request);
+        $request = 'API=RateV4&XML=' . urlencode($request);
       } else {
-        $request  = '<IntlRateRequest USERID="' . MODULE_SHIPPING_USPS_USERID . '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">' .
+        $request  = '<IntlRateV2Request USERID="' . MODULE_SHIPPING_USPS_USERID . '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">' .
+                    '<Revision>2</Revision>' .
                     '<Package ID="0">' .
                     '<Pounds>' . $this->pounds . '</Pounds>' .
                     '<Ounces>' . $this->ounces . '</Ounces>' .
                     '<MailType>Package</MailType>' .
                     '<Country>' . $this->countries[$lC_ShoppingCart->getShippingAddress('country_iso_code_2')] . '</Country>' .
                     '</Package>' .
-                    '</IntlRateRequest>';
+                    '</IntlRateV2Request>';
 
-        $request = 'API=IntlRate&XML=' . urlencode($request);
+        $request = 'API=IntlRateV2&XML=' . urlencode($request);
       }
 
       switch (MODULE_SHIPPING_USPS_SERVER) {
@@ -201,7 +202,7 @@
                            $api_dll = 'shippingapi.dll';
                            break;
         case 'test':
-        default:           $usps_server = 'testing.shippingapis.com';
+        default:           $usps_server = 'production.shippingapis.com';
                            $api_dll = 'ShippingAPITest.dll';
                            break;
       }
