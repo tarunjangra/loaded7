@@ -78,7 +78,7 @@ class lC_Content_new_products extends lC_Modules {
                               <div class="product_info">
                                 <h3>' . lc_link_object(lc_href_link(FILENAME_PRODUCTS, $product['keyword']), $product['name'])  . '</h3>
                               <small>' . substr($product['description'], 0, 60) . '...</small></div>
-                              <div class="price_info" style="margin-top:10px;"> <a href="javascript://" onclick="alert(\'' . $lC_Language->get('feature_not_available') . '\'); return false;">+ ' . $lC_Language->get('add_to_wishlist') . '</a>
+                              <div class="price_info" style="margin-top:10px;"> <a onclick="alert(\'' . $lC_Language->get('feature_not_available') . '\'); return false;">+ ' . $lC_Language->get('add_to_wishlist') . '</a>
                                 <button onclick="window.location.href=\'' . lc_href_link(FILENAME_PRODUCTS, $product['keyword'] . '&action=cart_add') . '\'" class="price_add" title="" type="button"><span class="pr_price">' . $product['display_price']. '</span><span class="pr_add">' . $lC_Language->get('button_add_to_cart') . '</span></button>
                               </div>
                             </li>';

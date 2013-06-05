@@ -91,6 +91,11 @@
       <group>general</group>
     </definition>
     <definition>
+      <key>text_browse_catalog</key>
+      <value><![CDATA[Browse Catalog]]></value>
+      <group>general</group>
+    </definition>
+    <definition>
       <key>text_sign_out</key>
       <value><![CDATA[Sign Out]]></value>
       <group>general</group>

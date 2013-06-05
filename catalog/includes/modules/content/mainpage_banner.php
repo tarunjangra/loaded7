@@ -40,7 +40,7 @@ class lC_Content_mainpage_banner extends lC_Modules {
     global $lC_Database, $lC_Language, $lC_Image, $lC_Banner, $lC_Services;
     
     if ($lC_Services->isStarted('banner') && $lC_Banner->exists('mainpage')) {
-      $this->_content = '<p align="center">' . $lC_Banner->display() . '</p>';
+      $this->_content = '<p class="mainpage-banner">' . $lC_Banner->display() . '</p>';
     }
   }
 }

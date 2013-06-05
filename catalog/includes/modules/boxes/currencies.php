@@ -45,11 +45,11 @@
           }
         }
 
-        $this->_content = '<ul class="category departments"><form name="currencies" action="' . lc_href_link(basename($_SERVER['SCRIPT_FILENAME']), null, 'AUTO', false) . '" method="get">' .
+        $this->_content = '<form name="currencies" action="' . lc_href_link(basename($_SERVER['SCRIPT_FILENAME']), null, 'AUTO', false) . '" method="get"><ul class="category departments">' .
                           $hidden_get_variables .
                           lc_draw_pull_down_menu('currency', $data, $_SESSION['currency'], 'onchange="this.form.submit();" style="width: 100%"') .
                           lc_draw_hidden_session_id_field() .
-                          '</form></ul><br><br>';
+                          '</ul></form><br><br>';
       }
     }
   }

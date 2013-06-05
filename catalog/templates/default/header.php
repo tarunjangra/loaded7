@@ -17,7 +17,7 @@
   <header class="wrapper clearfix">
     <div class="top_bar clear">
       <div class="mobile-menu" style="display:none;">
-        <img src="<?php echo DIR_WS_TEMPLATE_IMAGES; ?>mobile-menu.png" id="mobile-menu-button" />
+        <img alt="<?php echo STORE_NAME; ?>" src="<?php echo DIR_WS_TEMPLATE_IMAGES; ?>mobile-menu.png" id="mobile-menu-button" />
       </div>
       <div class="language_switch"> 
         <?php 
@@ -37,19 +37,19 @@
     </div>
     <div id="mobile-menu" style="display:none;">
       <ul class="table_view cells">
-        <li><a href="<?php echo lc_href_link(FILENAME_DEFAULT, null, 'NONSSL'); ?>">Home</a></li>
-        <li><a href="<?php echo lc_href_link(FILENAME_PRODUCTS, 'specials', 'NONSSL'); ?>">Specials</a></li>
-        <li><a href="<?php echo lc_href_link(FILENAME_PRODUCTS, 'new', 'NONSSL'); ?>">New Products</a></li>
-        <li><a href="<?php echo lc_href_link(FILENAME_INFO, 'contact', 'NONSSL'); ?>">Contact Us</a></li>
+        <li><a href="<?php echo lc_href_link(FILENAME_DEFAULT, null, 'NONSSL'); ?>"><?php echo $lC_Language->get('text_home'); ?></a></li>
+        <li><a href="<?php echo lc_href_link(FILENAME_PRODUCTS, 'specials', 'NONSSL'); ?>"><?php echo $lC_Language->get('text_specials'); ?></a></li>
+        <li><a href="<?php echo lc_href_link(FILENAME_PRODUCTS, 'new', 'NONSSL'); ?>"><?php echo $lC_Language->get('text_new_products'); ?></a></li>
+        <li><a href="<?php echo lc_href_link(FILENAME_INFO, 'contact', 'NONSSL'); ?>"><?php echo $lC_Language->get('text_contact'); ?></a></li>
       </ul>
     </div>
-    <h1 class="logo"><a href="<?php echo lc_href_link(FILENAME_DEFAULT, '', 'NONSSL'); ?>"><img src="<?php echo DIR_WS_TEMPLATE_IMAGES; ?>logo.png" /></a></h1>
+    <h1 class="logo"><a href="<?php echo lc_href_link(FILENAME_DEFAULT, '', 'NONSSL'); ?>"><img alt="<?php echo STORE_NAME; ?>" src="<?php echo DIR_WS_TEMPLATE_IMAGES; ?>logo.png" /></a></h1>
     <?php
       if (!empty($content_left)) {
       ?>
-      <button class="button brown_btn browse-catalog" style="display:none; padding:10px 10px 25px 10px !important;" type="button" id="browse-catalog">Browse Catalog</button>
+      <button class="button brown_btn browse-catalog" style="display:none; padding:10px 10px 25px 10px !important;" type="button" id="browse-catalog"><?php echo $lC_Language->get('text_browse_catalog'); ?></button>
       <div id="browse-catalog-div" style="display:none;">
-        <div id="left_side_nav" class="sideNavBox colLeft" style="display:block;">
+        <div class="sideNavBox colLeft" style="display:block;">
           <?php echo $content_left; ?>
         </div>
       </div>
@@ -123,7 +123,7 @@
               $currency_data[] = array('id' => $key, 'text' => $value['title']);
             }
             foreach ($currency_data as $currencies) {
-              echo '<option value="' . $currencies['id'] . '"' . ($_SESSION['currency'] == $currencies['id'] ? 'selected="selected"' : null) . '>' . $currencies['text'] . '</option>';
+              echo '<option value="' . $currencies['id'] . '"' . ($_SESSION['currency'] == $currencies['id'] ? ' selected="selected"' : null) . '>' . $currencies['text'] . '</option>';
             }
           ?>
         </select>
