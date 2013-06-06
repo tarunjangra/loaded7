@@ -49,9 +49,6 @@
       ?>
       <button class="button brown_btn browse-catalog" style="display:none; padding:10px 10px 25px 10px !important;" type="button" id="browse-catalog"><?php echo $lC_Language->get('text_browse_catalog'); ?></button>
       <div id="browse-catalog-div" style="display:none;">
-        <div class="sideNavBox colLeft" style="display:block;">
-          <?php echo $content_left; ?>
-        </div>
       </div>
       <?php
       }

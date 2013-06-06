@@ -17,7 +17,11 @@ global $lC_Language;
 ?>
 <script>
 $(document).ready(function() {
-
+  
+  var leftSideNavGet = $("#left_side_nav").html();
+  //var LeftSideNavMobile = leftSideNavGet.replace(' id="ul-top-categories"', ' id="ul-top-categories-mobile"').replace(' id="manufacturers"', ' id="manufacturers-mobile"');
+  $("#browse-catalog-div").html('<div id="left_side_nav_mobile" class="sideNavBox">' + leftSideNavGet + '</div>');
+  
   function setMaintenanceMode(s) {
     if (s == 'on') {
       $("body").mask('<span style="font-size:2em !important;"><?php echo $lC_Language->get('update_message_text1'); ?></span>');
@@ -69,10 +73,7 @@ $(document).ready(function() {
       }      
   }
   
-  );
-  
-  //style form select elements
-  //$("select").uniform();  
+  ); 
   
   //toggle box
   $(".toggle_box > li:first-child .toggle_title, .toggle_box > li:first-child .toggle_content").addClass('active');
