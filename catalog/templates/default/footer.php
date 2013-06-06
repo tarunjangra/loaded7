@@ -24,7 +24,7 @@
         <h3>Subscribe to our Newsletter</h3>
         <small>Instant wardrobe updates, new arrivals, fashion news, don't miss a beat - sign up to our newsletter now.</small>
         <form id="newsletter" action="<?php echo lc_href_link(FILENAME_ACCOUNT, 'create', 'SSL'); ?>" method="post">
-          <input type="text" class="input-text" value="" placeholder="<?php echo $lC_Language->get('text_enter_your_email'); ?>" id="newsletter" name="email">
+          <input type="text" class="input-text" value="" placeholder="<?php echo $lC_Language->get('text_enter_your_email'); ?>" id="newsletter-email" name="email">
           <button class="button" title="" type="submit"></button>
         </form>
       </div>
@@ -66,16 +66,16 @@
     <div class="footer_customblock">
       <div class="shipping_info">
         <span>introducing</span><br>
-        <big>FREE SHIPPING</big><br>
+        <span class="big-font">FREE SHIPPING</span><br>
         <small>for purchases above $200</small>
       </div>
       <div class="contact_info">
-        <big>1.823.456.7890</big>
+        <span class="big-font">1.823.456.7890</span>
 <!-- QR Code -->
         <div style="margin:-15px; padding:10px 20px 14px 10px; width:100%; height:32px; margin-top:5px;">
           <a id="qrcode-tooltip">
             <p style="width:32px;float:left;cursor:pointer;">
-              <img src="images/icons/qr-icon.png" border="0" class="Click to Generate QR Code" /> 
+              <img src="images/icons/qr-icon.png" class="Click to Generate QR Code" alt="QR Code for current URL" /> 
             </p>
           </a>
           <p style="float:left; padding:10px 0 0px 10px; font-weight:bold;">QR Code for Current URL</p> 
@@ -85,7 +85,7 @@
       </div>
     </div>
     <address>
-      Copyright &copy; <?php echo @date("Y"); ?> Loaded Commerce <img src="templates/default/images/payment_info.jpg"/>
+      Copyright &copy; <?php echo @date("Y"); ?> Loaded Commerce <img src="templates/default/images/payment_info.jpg" alt="Loaded 7 by Loaded Commerce" />
     </address>
   </footer>
 </div>           
@@ -106,10 +106,10 @@
     $BarcodeQR->url($qrcode_url);
     if ($lC_Customer->isLoggedOn() === true) {
       $BarcodeQR->draw(230, 'includes/work/qrcode/c' .  $lC_Customer->id . '.png');
-      echo '<strong>QR Code</strong><br /><br /><img src="includes/work/qrcode/c' . $lC_Customer->id . '.png" /><br /><br /><strong>Current URL</strong><p>' . $qrcode_url . '</p>';
+      echo '<strong>QR Code</strong><br /><br /><img src="includes/work/qrcode/c' . $lC_Customer->id . '.png" alt="QR Code for current URL" /><br /><br /><strong>Current URL</strong><p>' . $qrcode_url . '</p>';
     } else {
       $BarcodeQR->draw(230, 'includes/work/qrcode/g' .  $lC_Session->getID() . '.png');
-      echo '<strong>QR Code</strong><br /><br /><img src="includes/work/qrcode/g' . $lC_Session->getID() . '.png" /><br /><br /><strong>Current URL</strong><p>' . $qrcode_url . '</p>';
+      echo '<strong>QR Code</strong><br /><br /><img src="includes/work/qrcode/g' . $lC_Session->getID() . '.png" alt="QR Code for current URL" /><br /><br /><strong>Current URL</strong><p>' . $qrcode_url . '</p>';
     }
     ?>
     </div>

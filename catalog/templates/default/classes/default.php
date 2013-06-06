@@ -132,7 +132,7 @@ class lC_Default {
             '<div class="cart_bottom">' .
               '<div class="subtotal_menu">' .
                 '<small>' . $lC_Language->get('box_shopping_cart_subtotal') . '</small>' .
-                '<big>' . $lC_Currencies->format($lC_ShoppingCart->getSubTotal()) . '</big>' .
+                '<span class="big-font">' . $lC_Currencies->format($lC_ShoppingCart->getSubTotal()) . '</span>' .
               '</div>' .
               '<a href="' . lc_href_link(FILENAME_CHECKOUT, null, 'SSL') . '">' . $lC_Language->get('text_checkout') . '</a>' .
             '</div>' .

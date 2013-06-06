@@ -42,10 +42,10 @@
       }
 
       $Qmanufacturers->freeResult();
-
-      $this->_content = '<form id="brands" name="manufacturers" action="' . lc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false) . '" method="get"><ul class="category departments">' .
-                        lc_draw_pull_down_menu('manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . lc_draw_hidden_session_id_field() .
-                        '</ul></form><br><br>';
+      
+      $this->_content = '<form name="manufacturers" action="' . lc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false) . '" method="get"><div class="styled-select">' .
+                        lc_draw_pull_down_menu('manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '"') . lc_draw_hidden_session_id_field() .
+                        '</div></form><br><br>';
     }
 
     function install() {

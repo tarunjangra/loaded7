@@ -77,7 +77,7 @@ function refreshVariants() {
     model = '';
   }
 
-  document.getElementById('productInfoPrice').innerHTML = '<big>' + price + '</big>';
+  document.getElementById('productInfoPrice').innerHTML = '<span class="big-font">' + price + '</span>';
   document.getElementById('productInfoAvailability').innerHTML = availability;
   if (document.getElementById('productInfoModel')) {
     document.getElementById('productInfoModel').innerHTML = model;

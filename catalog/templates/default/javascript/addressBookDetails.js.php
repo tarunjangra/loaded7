@@ -34,8 +34,6 @@ function getZonesDropdown(country, zone) {
         return false;
       }
       $('#uniform-zones').html(data.zonesHtml).change();
-      if ($.browser.mozilla) $('#uniform-zones select').attr( "style", "padding-top:6px" );
-      if (data.single == '1') $('#uniform-zones').attr('style', 'padding:0 0 5px 0;');
     }
   );
 }

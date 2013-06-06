@@ -259,13 +259,13 @@ class lC_Product {
     global $lC_Services, $lC_Specials, $lC_Currencies;
 
     if (($with_special === true) && $lC_Services->isStarted('specials') && ($new_price = $lC_Specials->getPrice($this->_data['id'])) && ($lC_Specials->getPrice($this->_data['id']) < $this->getPriceBreak())  ) {
-      $price = '<big>' . $lC_Currencies->displayPrice($new_price, $this->_data['tax_class_id']) . '</big><small>' . $lC_Currencies->displayPrice($this->_data['price'], $this->_data['tax_class_id']) . '</small>'; 
+      $price = '<span class="big-font">' . $lC_Currencies->displayPrice($new_price, $this->_data['tax_class_id']) . '</span><small>' . $lC_Currencies->displayPrice($this->_data['price'], $this->_data['tax_class_id']) . '</small>'; 
 //        $price = '<s>' . $lC_Currencies->displayPrice($this->_data['price'], $this->_data['tax_class_id']) . '</s> <span class="productSpecialPrice">' . $lC_Currencies->displayPrice($new_price, $this->_data['tax_class_id']) . '</span>';
     } else {
       if ( $this->hasVariants() ) {
-        $price = 'from&nbsp;<big>' . $lC_Currencies->displayPrice($this->getVariantMinPrice(), $this->_data['tax_class_id']) . '</big><small></small>';
+        $price = 'from&nbsp;<span class="big-font">' . $lC_Currencies->displayPrice($this->getVariantMinPrice(), $this->_data['tax_class_id']) . '</span><small></small>';
       } else {
-        $price = '<big>' . $lC_Currencies->displayPrice($this->getPriceBreak(), $this->getTaxClassID()) . '</big><small></small>';
+        $price = '<span class="big-font">' . $lC_Currencies->displayPrice($this->getPriceBreak(), $this->getTaxClassID()) . '</span><small></small>';
       }
     }
 

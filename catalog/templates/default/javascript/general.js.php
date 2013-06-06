@@ -72,7 +72,7 @@ $(document).ready(function() {
   );
   
   //style form select elements
-  $("select").uniform();  
+  //$("select").uniform();  
   
   //toggle box
   $(".toggle_box > li:first-child .toggle_title, .toggle_box > li:first-child .toggle_content").addClass('active');

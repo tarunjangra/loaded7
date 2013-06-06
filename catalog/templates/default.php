@@ -263,7 +263,6 @@ if (!defined('DIR_WS_TEMPLATE_IMAGES')) define('DIR_WS_TEMPLATE_IMAGES', DIR_WS_
     <script src="templates/default/javascript/jquery.jcarousel.js"></script>
     <script src="templates/default/javascript/jquery.jtweetsanywhere-1.3.1.min.js" ></script>
     <script src="templates/default/javascript/jquery.magnify-1.0.2.js"></script>
-    <script src="templates/default/javascript/form_elements.js" ></script>
     <script src="templates/default/javascript/placeholder.js" ></script>
     
     <!-- main js.php for all site pages -->
@@ -288,6 +287,15 @@ if (!defined('DIR_WS_TEMPLATE_IMAGES')) define('DIR_WS_TEMPLATE_IMAGES', DIR_WS_
       $(document).ready(function(e) {
         var searchUrl = '<?php echo lc_href_link('rpc.php', 'action=search', 'AUTO'); ?>'  
         $('#liveSearchContainer input[name="q"]').liveSearch({url: searchUrl + '&q='});
+    
+        var showDebug = '<?php echo $lC_Template->showDebugMessages(); ?>';
+        if (showDebug) {
+          var debugOutput = <?php echo (isset($_SESSION['debugStack']) && !empty($_SESSION['debugStack'])) ? $_SESSION['debugStack'] : "''" ?>;
+          $('#debugInfoContainer > span').html(debugOutput);
+          $('#debugInfoContainer').show();
+        } else {
+          $('#debugInfoContainer').hide();
+        }
       }); 
     </script>
   </body>

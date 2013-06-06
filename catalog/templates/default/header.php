@@ -104,7 +104,7 @@
           <div class="cart_bottom">
           <div class="subtotal_menu">
           <small>' . $lC_Language->get('box_shopping_cart_subtotal') . '</small>
-          <big>' . $lC_Currencies->format($lC_ShoppingCart->getSubTotal()) . '</big>
+          <span class="big-font">' . $lC_Currencies->format($lC_ShoppingCart->getSubTotal()) . '</span>
           </div>
           <a href="' . lc_href_link(FILENAME_CHECKOUT, 'shopping_cart', 'SSL') . '">' . $lC_Language->get('button_view_cart') . '</a>
           </div>
@@ -116,7 +116,8 @@
     </div>
     <div id="currencySelect">      
       <form id="currencies" name="currencies" action="<?php echo lc_href_link(basename($_SERVER['SCRIPT_FILENAME']), null, 'AUTO', false); ?>" method="get">
-        <select name="currency" id="currency" onchange="this.form.submit();">
+        <div class="styled-select">
+          <select name="currency" id="currency" onchange="this.form.submit();">
           <?php 
             $currency_data = array();
             foreach ($lC_Currencies->currencies as $key => $value) {
@@ -126,7 +127,8 @@
               echo '<option value="' . $currencies['id'] . '"' . ($_SESSION['currency'] == $currencies['id'] ? ' selected="selected"' : null) . '>' . $currencies['text'] . '</option>';
             }
           ?>
-        </select>
+          </select>
+        </div>
         <?php echo lc_draw_hidden_session_id_field(); ?>
       </form>
     </div>

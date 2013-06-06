@@ -56,16 +56,16 @@ if ($lC_MessageStack->size('address') > 0) {
         if (ACCOUNT_STATE > -1) {
         ?>
         <li>
-          <div id="uniform-zones" class="selector">   
+          <div id="uniform-zones" class="styled-select">   
           </div>
         </li>
         <?php
         }
       ?>
       <li>
-        <div id="uniform-country" class="selector"> 
+        <div id="uniform-country" class="styled-select"> 
           <?php 
-            echo lc_draw_label(null, null, 'country') . lc_draw_pull_down_menu('country', $countries_array, (isset($Qentry) ? $Qentry->valueInt('entry_country_id') : STORE_COUNTRY), 'onchange="getZonesDropdown(this.value)" style="padding-top:6px;"');
+            echo lc_draw_label(null, null, 'country') . lc_draw_pull_down_menu('country', $countries_array, (isset($Qentry) ? $Qentry->valueInt('entry_country_id') : STORE_COUNTRY), 'onchange="getZonesDropdown(this.value)"');
           ?>
         </div>
       </li>
