@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language>
+  <definitions>
+    <definition>
+      <key>payment_paypal_title</key>
+      <value><![CDATA[<img src="images/payment/paypal-small.png" style="vertical-align:middle"> PayPal Standard Payments Module
+ ]]></value>
+      <group>modules-payment</group>
+    </definition>  
+    <definition>
+      <key>payment_paypal_description</key>
+      <value><![CDATA[<h3 class="thin small-margin-left mid-margin-bottom"><img src="images/payment/paypal-large.png" class="margin-right" style="vertical-align:middle">PayPal Standard Payments Module</h3>]]></value>
+      <group>modules-payment</group>
+    </definition>    
+    <definition>
+      <key>payment_paypal_payment_title</key>
+      <value><![CDATA[PayPal Standard Payments by %s]]></value>
+      <group>modules-payment</group>
+    </definition>          
+    <definition>
+      <key>payment_paypal_payment_blurb</key>
+      <value><![CDATA[Pay with PayPal Standard Payments - The faster, safer way to pay.]]></value>
+      <group>modules-payment</group>
+    </definition>  
+    <definition>
+      <key>payment_paypal_method_title</key>
+      <value><![CDATA[<img src="images/payment/paypal-small.png" style="vertical-align:middle">   Standard Payments <br />Pay with PayPal Standard Payments - The faster, safer way to pay.]]></value>
+      <group>modules-payment</group>
+    </definition> 
+    <definition>   
+      <key>payment_paypal_error_server</key>
+      <value><![CDATA[ERROR: There was no response from the PayPal Standard Payments server. Please try again.]]></value>
+      <group>modules-payment</group>
+    </definition> 
+    <definition>
+      <key>payment_paypal_error_occurred</key>
+      <value><![CDATA[ERROR: %s. Please try again.]]></value>
+      <group>modules-payment</group>
+    </definition>    
+  </definitions>
+</language>
