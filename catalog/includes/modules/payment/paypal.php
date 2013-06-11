@@ -75,8 +75,6 @@ class lC_Payment_paypal extends lC_Payment {
     if (defined('MODULE_PAYMENT_PAYPAL_STATUS')) {
       $this->initialize();
      }
-
-    
   }
 
   public function initialize() {
@@ -260,7 +258,7 @@ class lC_Payment_paypal extends lC_Payment {
         'currency_code' => $_SESSION['currency'],
         'return' => $return_href_link,
         'cancel_return' => $cancel_href_link,
-        /*'notify_url' => $notify_href_link,*/
+        'notify_url' => $notify_href_link,
         'no_shipping' => $no_shipping,
         'rm' => MODULE_PAYMENT_PAYPAL_RM,
         'custom' => $signature,
@@ -280,14 +278,9 @@ class lC_Payment_paypal extends lC_Payment {
     $paypal_params = '';
     foreach($paypal_standard_action_params as $name => $value) {
       $paypal_params .= lc_draw_hidden_field($name, $value);
-      //$paypal_params .= $name.lc_draw_input_field($name, $value).'<br>';
     }
     return $paypal_params;    
-  } 
-
-  
-  
-
+  }
  /**
   * Parse the response from the processor
   *
