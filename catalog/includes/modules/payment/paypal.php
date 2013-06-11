@@ -32,7 +32,7 @@ class lC_Payment_paypal extends lC_Payment {
   * @var string
   * @access protected
   */  
-  protected $_author_name = 'Loaded Commerce';
+  protected $_author_name = 'Loaded Commerce'; /////
  /**
   * The developers address
   *
