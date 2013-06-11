@@ -162,6 +162,7 @@ class lC_Payment_paypal extends lC_Payment {
   * @return integer
   */ 
   public function confirmation() {
+    $this->_order_id = lC_Order::insert();   
    return false;
   }
 
@@ -217,10 +218,21 @@ class lC_Payment_paypal extends lC_Payment {
             'item_name_'.$i => $shoppingcart_products[$i]['name'],
             'item_number_'.$i => $shoppingcart_products[$i]['item_id'],
             'quantity_'.$i => $shoppingcart_products[$i]['quantity'],
-            'amount_'.$i => $shoppingcart_products[$i]['price'],
+            'amount_'.$i => $lC_Currencies->formatRaw($shoppingcart_products[$i]['price'], $lC_Currencies->getCode()),
             'tax_'.$i => $shoppingcart_products[$i]['tax_class_id']            
             ); 
-          $paypal_action_params =  array_merge($paypal_action_params,$paypal_shoppingcart_params);
+                   
+        //Customer Specified Product Options: PayPal Max = 2
+        if($shoppingcart_products[$i]['variants']) {
+          for ($j=0, $n=sizeof($shoppingcart_products[$i]['variants']); $j<2; $j++) {
+            $paypal_shoppingcart_variants_params = array(
+                'on'.$j.'_'.$i => $shoppingcart_products[$i]['variants'][$j]['group_title'],
+                'os'.$j.'_'.$i => $shoppingcart_products[$i]['variants'][$j]['value_title']          
+                ); 
+            $paypal_shoppingcart_params =  array_merge($paypal_shoppingcart_params,$paypal_shoppingcart_variants_params);
+          }
+        }
+        $paypal_action_params = array_merge($paypal_action_params,$paypal_shoppingcart_params);
       }
     } else {
       $item_number = '';
@@ -237,9 +249,9 @@ class lC_Payment_paypal extends lC_Payment {
         ); 
     }
 
-    $return_href_link = lc_href_link(FILENAME_CHECKOUT, 'process', 'SSL');
-    $cancel_href_link = lc_href_link(FILENAME_CHECKOUT, 'cart', 'SSL');
-    $notify_href_link = lc_href_link(FILENAME_IPN, null, 'SSL');
+    $return_href_link = lc_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true, true, true);
+    $cancel_href_link = lc_href_link(FILENAME_CHECKOUT, 'cart', 'SSL', true, true, true);
+    $notify_href_link = lc_href_link(FILENAME_IPN, null, 'SSL', true, true, true);
     $signature = $this->setTransactionID($amount);
 
     $paypal_standard_params = array(
@@ -272,6 +284,8 @@ class lC_Payment_paypal extends lC_Payment {
     }
     return $paypal_params;    
   } 
+
+  
   
 
  /**
@@ -280,8 +294,7 @@ class lC_Payment_paypal extends lC_Payment {
   * @access public
   * @return string
   */ 
-  public function process() {
-    $this->_order_id = lC_Order::insert();
+  public function process() {    
     lC_Order::process($this->_order_id, $this->order_status);
   }
 
