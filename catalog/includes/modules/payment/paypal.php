@@ -200,7 +200,7 @@ class lC_Payment_paypal extends lC_Payment {
     } 
 
     $shoppingcart_products = $lC_ShoppingCart->getProducts();
-    $amount = $lC_Currencies->formatRaw($lC_ShoppingCart->getTotal(), $lC_Currencies->getCode());
+    $amount = $lC_Currencies->formatRaw($lC_ShoppingCart->getSubTotal(), $lC_Currencies->getCode());
 
     if(MODULE_PAYMENT_PAYPAL_METHOD == 'Itemized') { 
       $discount_amount_cart = 0;     
