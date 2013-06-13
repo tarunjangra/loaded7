@@ -249,7 +249,7 @@ class lC_Payment_paypal extends lC_Payment {
 
     $return_href_link = lc_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true, true, true);
     $cancel_href_link = lc_href_link(FILENAME_CHECKOUT, 'cart', 'SSL', true, true, true);
-    $notify_href_link = lc_href_link(FILENAME_IPN, null, 'SSL', true, true, true);
+    $notify_href_link = lc_href_link('ipn.php', null, 'SSL', true, true, true);
     $signature = $this->setTransactionID($amount);
 
     $paypal_standard_params = array(
