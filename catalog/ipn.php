@@ -1,31 +1,15 @@
 <?php
-/**
- *  PHP-PayPal-IPN Example
- *
- *  This shows a basic example of how to use the IpnListener() PHP class to 
- *  implement a PayPal Instant Payment Notification (IPN) listener script.
- *
- *  For a more in depth tutorial, see my blog post:
- *  http://www.micahcarrick.com/paypal-ipn-with-php.html
- *
- *  This code is available at github:
- *  https://github.com/Quixotix/PHP-PayPal-IPN
- *
- *  @package    PHP-PayPal-IPN
- *  @author     Micah Carrick
- *  @copyright  (c) 2011 - Micah Carrick
- *  @license    http://opensource.org/licenses/gpl-3.0.html
- */
- 
- 
-/*
-Since this script is executed on the back end between the PayPal server and this
-script, you will want to log errors to a file or email. Do not try to use echo
-or print--it will not work! 
-
-Here I am turning on PHP error logging to a file called "ipn_errors.log". Make
-sure your web server has permissions to write to that file. In a production 
-environment it is better to have that log file outside of the web root.
+/**  
+*  $Id: index.php v1.0 2013-01-01 datazen $
+*
+*  LoadedCommerce, Innovative eCommerce Solutions
+*  http://www.loadedcommerce.com
+*
+*  Copyright (c) 2013 Loaded Commerce, LLC
+*
+*  @author     Loaded Commerce Team
+*  @copyright  (c) 2013 Loaded Commerce Team
+*  @license    http://loadedcommerce.com/license.html
 */
 require('includes/application_top.php');
 
@@ -36,57 +20,9 @@ ini_set('error_log', DIR_FS_WORK . 'ipn_errors.log');
 require($lC_Vqmod->modCheck('includes/modules/payment/paypal/ipnlistener.php'));
 $listener = new IpnListener();
 
-
-/*
-When you are testing your IPN script you should be using a PayPal "Sandbox"
-account: https://developer.paypal.com
-When you are ready to go live change use_sandbox to false.
-*/
-
+// testing your IPN in sandbox/live mode.
 $listener->use_sandbox = MODULE_PAYMENT_PAYPAL_TEST_MODE;
-$listener->force_ssl_v3 = ENABLE_SSL;
 
-/*****************************/
-function debugWriteFile($str,$mode="a") {
-    $fp = @fopen("SAR_ipn.txt",$mode);  
-    @flock($fp, LOCK_EX); 
-    @fwrite($fp,$str); 
-    @flock($fp, LOCK_UN); 
-    @fclose($fp);
-  }
-
-  $postString = ''; 
-  foreach($_POST as $key => $val) $postString .= $key.' = '.$val."\n";
-
-  if($postString != '') {
-    debugWriteFile($postString,"w+");
-  }
-
-/**********************************/
-/*
-By default the IpnListener object is going  going to post the data back to PayPal
-using cURL over a secure SSL connection. This is the recommended way to post
-the data back, however, some people may have connections problems using this
-method. 
-
-To post over standard HTTP connection, use:
-$listener->use_ssl = false;
-
-To post using the fsockopen() function rather than cURL, use:
-$listener->use_curl = false;
-*/
-
-/*
-The processIpn() method will encode the POST variables sent by PayPal and then
-POST them back to the PayPal server. An exception will be thrown if there is 
-a fatal error (cannot connect, your server is not configured properly, etc.).
-Use a try/catch block to catch these fatal errors and log to the ipn_errors.log
-file we setup at the top of this file.
-
-The processIpn() method will send the raw data on 'php://input' to PayPal. You
-can optionally pass the data to processIpn() yourself:
-$verified = $listener->processIpn($my_post_data);
-*/
 try {
     $listener->requirePostMethod();
     $verified = $listener->processIpn();
@@ -107,7 +43,7 @@ if ($verified) {
     end user made a purchase (such as in the "success" page on a web payments
     standard button). The fields PayPal recommends checking are:
     
-        1. Check the $_POST['payment_status'] is "Completed"
+      1. Check the $_POST['payment_status'] is "Completed"
 	    2. Check that $_POST['txn_id'] has not been previously processed 
 	    3. Check that $_POST['receiver_email'] is your Primary PayPal email 
 	    4. Check that $_POST['payment_amount'] and $_POST['payment_currency'] 
@@ -117,7 +53,7 @@ if ($verified) {
     example and just send an email using the getTextReport() method to get all
     of the details about the IPN.  
     */
-    mail('support@globonetics.com', 'Verified IPN', $listener->getTextReport());
+    mail(STORE_OWNER_EMAIL_ADDRESS, 'Verified IPN', $listener->getTextReport());
 
 } else {
     /*
@@ -125,7 +61,7 @@ if ($verified) {
     a good idea to have a developer or sys admin manually investigate any 
     invalid IPN.
     */
-    mail('support@globonetics.com', 'Invalid IPN', $listener->getTextReport());
+    mail(STORE_OWNER_EMAIL_ADDRESS, 'Invalid IPN', $listener->getTextReport());
 }
 
 ?>
