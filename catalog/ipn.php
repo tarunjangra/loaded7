@@ -49,7 +49,7 @@ $currency = $order->info['currency'];
 
  /********************/
 $str = '123';
-  $fp = @fopen("SAR_ipn.txt",$mode);  
+  $fp = @fopen("SAR_ipn.txt",'w+');  
   @flock($fp, LOCK_EX); 
   @fwrite($fp,$str); 
   @flock($fp, LOCK_UN); 
