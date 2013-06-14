@@ -48,7 +48,7 @@ $amount = $order->info['total'];
 $currency = $order->info['currency'];
 
  /********************/
-$str = '123';
+$str = $listener->paymentStatus();
   $fp = @fopen("SAR_ipn.txt",'w+');  
   @flock($fp, LOCK_EX); 
   @fwrite($fp,$str); 
