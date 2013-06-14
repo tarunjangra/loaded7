@@ -38,23 +38,7 @@ try {
 }
 
 
-  /********************/
-function debugWriteFile($str,$mode="a") {
-  $fp = @fopen("SARipn.txt",$mode);  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
-}
-
-/*******************/
-      $postString = 'line no 51'."\n"; 
-      $postString .= 'paymentStatus = '.$listener->paymentStatus()."\n"; 
-      //foreach($listener->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
-      if($postString != '') {
-        $this->debugWriteFile($postString,"a+");
-      }
-     /*******************/
+  
 
 $response_array = array('root' => $_POST);
 $ipn_order_id = $_GET['ipn_order_id'];
@@ -63,11 +47,29 @@ $order = new lC_Order($ipn_order_id);
 $amount = $order->info['total'];
 $currency = $order->info['currency'];
 
+ /********************/
+function debugWriteFile($str,$mode="a") {
+  $fp = @fopen("ipn.txt",$mode);  
+  @flock($fp, LOCK_EX); 
+  @fwrite($fp,$str); 
+  @flock($fp, LOCK_UN); 
+  @fclose($fp);
+}
+
 //The processIpn() method returned true if the IPN was "VERIFIED" and false if it was "INVALID".
 if ($verified) {
   
+  $paymentStatus = $listener->paymentStatus();
+  /*******************/
+      $postString = 'line no 297'."\n paymentStatus - ".$paymentStatus;      
+      //foreach($this->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
+      if($postString != '') {
+        $this->debugWriteFile($postString,"a+");
+      }
+     /*******************/
+
   // update order status
-  switch ($listener->paymentStatus()) {
+  switch ($paymentStatus ) {
     case 'Completed':
       //Check that $_POST['payment_amount'] and $_POST['payment_currency'] are correct
       if($listener->validPayment($amount,$currency)) {      
