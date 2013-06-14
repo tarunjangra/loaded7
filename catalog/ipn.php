@@ -48,25 +48,19 @@ $amount = $order->info['total'];
 $currency = $order->info['currency'];
 
  /********************/
-function debugWriteFile($str,$mode="a") {
+$str = '123';
   $fp = @fopen("SAR_ipn.txt",$mode);  
   @flock($fp, LOCK_EX); 
   @fwrite($fp,$str); 
   @flock($fp, LOCK_UN); 
   @fclose($fp);
-}
+
 
 $paymentStatus = '111';
 //The processIpn() method returned true if the IPN was "VERIFIED" and false if it was "INVALID".
 if ($verified) {
   
   //$paymentStatus = $listener->paymentStatus();
-  /*******************/
-      $postString = "line no 297";
-      if($postString != '') {
-        $this->debugWriteFile($postString,"a+");
-      }
-     /*******************/
 
   // update order status
   switch ($paymentStatus ) {
