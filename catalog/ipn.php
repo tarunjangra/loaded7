@@ -37,24 +37,6 @@ try {
     exit(0);
 }
 
-
-  /********************/
-function debugWriteFile($str,$mode="a") {
-  $fp = @fopen("ipn.txt",$mode);  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
-}
-
-/*******************/
-      $postString = 'line no 297'."\n"; 
-      $postString .= 'paymentStatus = '.$listener->paymentStatus()."\n"; 
-      foreach($listener->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
-      if($postString != '') {
-        $this->debugWriteFile($postString,"a+");
-      }
-     /*******************/
 $response_array = array('root' => $_POST);
 $ipn_order_id = $_GET['ipn_order_id'];
 
@@ -97,7 +79,7 @@ if ($verified) {
   $ipn_transaction_response = 'INVALID';
   @mail(MODULE_PAYMENT_PAYPAL_ID, 'Invalid IPN', $listener->getTextReport());
 }
-
+/*
 $lC_XML = new lC_XML($response_array);
 
 $Qtransaction = $lC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
@@ -107,4 +89,5 @@ $Qtransaction->bindInt(':transaction_code', 1);
 $Qtransaction->bindValue(':transaction_return_value', $lC_XML->toXML());
 $Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($ipn_transaction_response)) == 'VERIFIED') ? 1 : 0);
 $Qtransaction->execute();
+*/
 ?>
