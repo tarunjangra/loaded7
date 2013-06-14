@@ -37,6 +37,25 @@ try {
     exit(0);
 }
 
+
+  /********************/
+function debugWriteFile($str,$mode="a") {
+  $fp = @fopen("ipn.txt",$mode);  
+  @flock($fp, LOCK_EX); 
+  @fwrite($fp,$str); 
+  @flock($fp, LOCK_UN); 
+  @fclose($fp);
+}
+
+/*******************/
+      $postString = 'line no 297'."\n"; 
+      $postString .= 'paymentStatus = '.$listener->paymentStatus()."\n"; 
+      foreach($listener->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
+      if($postString != '') {
+        $this->debugWriteFile($postString,"a+");
+      }
+     /*******************/
+
 $response_array = array('root' => $_POST);
 $ipn_order_id = $_GET['ipn_order_id'];
 
