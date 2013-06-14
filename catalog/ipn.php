@@ -56,18 +56,9 @@ function debugWriteFile($str,$mode="a") {
   @fclose($fp);
 }
 
+$paymentStatus = '111';
 //The processIpn() method returned true if the IPN was "VERIFIED" and false if it was "INVALID".
 if ($verified) {
-  
-  //$paymentStatus = $listener->paymentStatus();
-  /*******************/
-      $postString = 'line no 297'."\n paymentStatus - ".$paymentStatus;      
-      //foreach($this->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
-      if($postString != '') {
-        $this->debugWriteFile($postString,"a+");
-      }
-     /*******************/
-
   // update order status
   switch ($paymentStatus ) {
     case 'Completed':
