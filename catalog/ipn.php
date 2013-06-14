@@ -11,6 +11,7 @@
 *  @copyright  (c) 2013 Loaded Commerce Team
 *  @license    http://loadedcommerce.com/license.html
 */
+
 require('includes/application_top.php');
 require_once($lC_Vqmod->modCheck('includes/classes/order.php'));
 require_once($lC_Vqmod->modCheck('includes/classes/xml.php'));
@@ -36,6 +37,7 @@ try {
     exit(0);
 }
 
+
 $response_array = array('root' => $_POST);
 $ipn_order_id = $_GET['ipn_order_id'];
 
@@ -43,17 +45,15 @@ $order = new lC_Order($ipn_order_id);
 $amount = $order->info['total'];
 $currency = $order->info['currency'];
 
-/*
-The processIpn() method returned true if the IPN was "VERIFIED" and false if it
-was "INVALID".
-*/
+
+//The processIpn() method returned true if the IPN was "VERIFIED" and false if it was "INVALID".
 if ($verified) {
   
   // update order status
   switch ($listener->paymentStatus()) {
     case 'Completed':
       //Check that $_POST['payment_amount'] and $_POST['payment_currency'] are correct
-      if($listener->validPayment($amount,$currency)) {
+      if($listener->validPayment($amount,$currency)) {      
         $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_DEFAULT_STATUS_ID;
       } else {
         $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID;
@@ -71,19 +71,19 @@ if ($verified) {
   }
   lC_Order::process($_order_id, $_order_status);
   $response_array['root']['transaction_response'] = 'VERIFIED';
+  $ipn_transaction_response = 'VERIFIED';
   @mail(MODULE_PAYMENT_PAYPAL_ID, 'Verified IPN', $listener->getTextReport());
 } else {
-  /*
-  An Invalid IPN *may* be caused by a fraudulent transaction attempt. It's
-  a good idea to have a developer or sys admin manually investigate any 
-  invalid IPN.
-  */
+  //An Invalid IPN *may* be caused by a fraudulent transaction attempt. It's a good idea to have a developer or sys admin manually investigate any invalid IPN.
+
   lC_Order::process($_order_id, MODULE_PAYMENT_PAYPAL_ORDER_CANCELED_STATUS_ID);
   $response_array['root']['transaction_response'] = 'INVALID';
+  $ipn_transaction_response = 'INVALID';
   @mail(MODULE_PAYMENT_PAYPAL_ID, 'Invalid IPN', $listener->getTextReport());
 }
 
 $lC_XML = new lC_XML($response_array);
+
 
 /*********************/
 function debugWriteFile($str,$mode="a+") {
@@ -120,12 +120,23 @@ $v = $lC_XML->toXML();
 /*********************/
 
 
+
+
+
+
 $Qtransaction = $lC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
 $Qtransaction->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
 $Qtransaction->bindInt(':orders_id', $ipn_order_id);
 $Qtransaction->bindInt(':transaction_code', 1);
 $Qtransaction->bindValue(':transaction_return_value', $lC_XML->toXML());
-$Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($this->_transaction_response)) == 'VERIFIED') ? 1 : 0);
+$Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($ipn_transaction_response)) == 'VERIFIED') ? 1 : 0);
+
+
+
+
+
+
+
 $Qtransaction->execute();
 
 ?>
