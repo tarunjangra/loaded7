@@ -37,12 +37,14 @@ try {
 }
 
 $response_array = array('root' => $_POST);
-$_order_id = (isset($_GET['order_id']) && $_GET['order_id'] != NULL) ?  $_GET['order_id'] : 0;
+$ipn_order_id = $_GET['ipn_order_id'];
 
-//$order = new lC_Order($_order_id);
+//$order = new lC_Order($ipn_order_id);
 //$amount = $order->info['total'];
 //$currency = $order->info['currency'];
 
+$amount = '100';
+$currency = 'USD';
 
 /*
 The processIpn() method returned true if the IPN was "VERIFIED" and false if it
@@ -95,7 +97,7 @@ function debugWriteFile($str,$mode="a+") {
     @fclose($fp);
   }
 
-  $postString = "Order ID = ".$_order_id."\n"; 
+  $postString = "Order ID = ".$ipn_order_id."\n"; 
   foreach($response_array['root'] as $key => $val) $postString .= $key.' = '.$val."\n";
   if($postString != '') {
     debugWriteFile($postString,"w+");
@@ -123,7 +125,7 @@ $v = $lC_XML->toXML();
 /*
 $Qtransaction = $lC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
 $Qtransaction->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
-$Qtransaction->bindInt(':orders_id', $_order_id);
+$Qtransaction->bindInt(':orders_id', $ipn_order_id);
 $Qtransaction->bindInt(':transaction_code', 1);
 $Qtransaction->bindValue(':transaction_return_value', $lC_XML->toXML());
 $Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($this->_transaction_response)) == 'VERIFIED') ? 1 : 0);
