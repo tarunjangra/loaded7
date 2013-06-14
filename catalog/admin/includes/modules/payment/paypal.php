@@ -96,7 +96,12 @@ class lC_Payment_paypal extends lC_Payment_Admin {
 
    // $lC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Set Pending Notification Status', 'MODULE_PAYMENT_PAYPAL_PROCESSING_STATUS_ID', '1', 'Set the Pending Notification status of orders made with this payment module', '6', '6', 'lc_cfg_use_get_order_status_title', 'lc_cfg_set_order_statuses_pull_down_menu(class=\"select\",', now())");
 
-    $lC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_PAYPAL_ORDER_DEFAULT_STATUS_ID', '1', 'Set the status of orders made with this payment module', '6', '7', 'lc_cfg_use_get_order_status_title', 'lc_cfg_set_order_statuses_pull_down_menu(class=\"select\",', now())");
+
+    $lC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Pending Notification Status', 'MODULE_PAYMENT_PAYPAL_PROCESSING_STATUS_ID', '1', 'Set the Pending Notification status of orders made with this payment module', '6', '7', 'lc_cfg_use_get_order_status_title', 'lc_cfg_set_order_statuses_pull_down_menu(class=\"select\",', now())");
+
+    $lC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_PAYPAL_ORDER_DEFAULT_STATUS_ID', '1', 'Set the status of orders made with this payment module', '6', '8', 'lc_cfg_use_get_order_status_title', 'lc_cfg_set_order_statuses_pull_down_menu(class=\"select\",', now())");
+   
+    $lC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Hold Order Status', 'MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID', '1', 'Set the status of <b>On Hold</b> orders made with this payment module', '6', '9', 'lc_cfg_use_get_order_status_title', 'lc_cfg_set_order_statuses_pull_down_menu(class=\"select\",', now())");
 
     //$lC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Set On Hold Order Status', 'MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID', '1', 'Set the status of <b>On Hold</b> orders made with this payment module', '6', '8', 'lc_cfg_use_get_order_status_title', 'lc_cfg_set_order_statuses_pull_down_menu(class=\"select\",', now())");
 
@@ -146,8 +151,10 @@ class lC_Payment_paypal extends lC_Payment_Admin {
           'MODULE_PAYMENT_PAYPAL_ID',
           'MODULE_PAYMENT_PAYPAL_BUSINESS_ID',
           'MODULE_PAYMENT_PAYPAL_DEFAULT_CURRENCY',          
-          'MODULE_PAYMENT_PAYPAL_ZONE',
+          'MODULE_PAYMENT_PAYPAL_ZONE',          
+          'MODULE_PAYMENT_PAYPAL_PROCESSING_STATUS_ID',
           'MODULE_PAYMENT_PAYPAL_ORDER_DEFAULT_STATUS_ID',
+          'MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID',
           'MODULE_PAYMENT_PAYPAL_SORT_ORDER',          
           'MODULE_PAYMENT_PAYPAL_NO_NOTE',
           'MODULE_PAYMENT_PAYPAL_METHOD',

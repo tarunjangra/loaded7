@@ -58,6 +58,9 @@ class IpnListener {
   private $response_status = '';
   private $response = '';
 
+  public  $key = array();
+  public  $uniqueTxnID = false;
+
   const PAYPAL_HOST = 'www.paypal.com';
   const SANDBOX_HOST = 'www.sandbox.paypal.com';
   
@@ -250,6 +253,7 @@ class IpnListener {
       $this->post_data = $post_data;
 
       foreach ($this->post_data as $key => $value) {
+        $this->key[$key] = $value;
         $encoded_data .= "&$key=".urlencode($value);
       }
     }
@@ -283,4 +287,24 @@ class IpnListener {
       throw new Exception("Invalid HTTP request method.");
     }
   }
+  
+  function paymentStatus($statusName = '') {
+    if(!empty($statusName)) {
+      return ($this->key['payment_status'] == $statusName);
+    }
+
+    return $this->key['payment_status'];
+  }
+
+  function validPayment($amount,$currency) {
+
+    $valid_payment = true;
+    //check the payment currency and amount
+    if ( ($this->key['mc_currency'] != $currency) || ($this->key['mc_gross'] != $amount) )
+      $valid_payment = false;
+    
+    return $valid_payment;
+  }
+
 }
+?>

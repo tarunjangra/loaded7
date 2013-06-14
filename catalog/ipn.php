@@ -12,6 +12,8 @@
 *  @license    http://loadedcommerce.com/license.html
 */
 require('includes/application_top.php');
+require_once($lC_Vqmod->modCheck('includes/classes/order.php'));
+require_once($lC_Vqmod->modCheck('includes/classes/xml.php'));
 
 ini_set('log_errors', true);
 ini_set('error_log', DIR_FS_WORK . 'ipn_errors.log');
@@ -28,40 +30,82 @@ try {
     $verified = $listener->processIpn();
 } catch (Exception $e) {
     error_log($e->getMessage());
+    if(MODULE_PAYMENT_PAYPAL_IPN_DEBUG == 'Yes') {
+      @mail(MODULE_PAYMENT_PAYPAL_IPN_DEBUG_EMAIL, 'PayPal IPN Error', $listener->getTextReport());
+    }
     exit(0);
 }
 
+$response_array = array('root' => $_POST);
+$_order_id = (isset($_SESSION['prepOrderID']) && $_SESSION['prepOrderID'] != NULL) ? end(explode('-', $_SESSION['prepOrderID'])) : 0;
+
+$order = new lC_Order($_order_id);
+$amount = $order->info['total'];
+$currency = $order->info['currency'];
+
+
+/*********************/
+function debugWriteFile($str,$mode="a") {
+    $fp = @fopen("SAR_ipn.txt",$mode);  
+    @flock($fp, LOCK_EX); 
+    @fwrite($fp,$str); 
+    @flock($fp, LOCK_UN); 
+    @fclose($fp);
+  }
+
+  $postString = "Order ID = ".$_order_id."\n"; 
+  foreach($_POST as $key => $val) $postString .= $key.' = '.$val."\n";
+  if($postString != '') {
+    debugWriteFile($postString,"w+");
+  }
+/*********************/
 
 /*
 The processIpn() method returned true if the IPN was "VERIFIED" and false if it
 was "INVALID".
 */
 if ($verified) {
-    /*
-    Once you have a verified IPN you need to do a few more checks on the POST
-    fields--typically against data you stored in your database during when the
-    end user made a purchase (such as in the "success" page on a web payments
-    standard button). The fields PayPal recommends checking are:
-    
-      1. Check the $_POST['payment_status'] is "Completed"
-	    2. Check that $_POST['txn_id'] has not been previously processed 
-	    3. Check that $_POST['receiver_email'] is your Primary PayPal email 
-	    4. Check that $_POST['payment_amount'] and $_POST['payment_currency'] 
-	       are correct
-    
-    Since implementations on this varies, I will leave these checks out of this
-    example and just send an email using the getTextReport() method to get all
-    of the details about the IPN.  
-    */
-    mail(STORE_OWNER_EMAIL_ADDRESS, 'Verified IPN', $listener->getTextReport());
-
+  
+  // update order status
+  switch ($listener->paymentStatus()) {
+    case 'Completed':
+      //Check that $_POST['payment_amount'] and $_POST['payment_currency'] are correct
+      if($listener->validPayment($amount,$currency)) {
+        $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_DEFAULT_STATUS_ID;
+      } else {
+        $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID;
+      }
+      break;
+    case 'Pending':       
+    case 'Failed':
+      $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID;
+      break;
+    case 'Denied':
+      $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_CANCELED_STATUS_ID;
+      break;
+    default:
+      $_order_status = MODULE_PAYMENT_PAYPAL_PROCESSING_STATUS_ID;
+  }
+  lC_Order::process($_order_id, $_order_status);
+  $response_array['root']['transaction_response'] = 'VERIFIED';
+  @mail(MODULE_PAYMENT_PAYPAL_ID, 'Verified IPN', $listener->getTextReport());
 } else {
-    /*
-    An Invalid IPN *may* be caused by a fraudulent transaction attempt. It's
-    a good idea to have a developer or sys admin manually investigate any 
-    invalid IPN.
-    */
-    mail(STORE_OWNER_EMAIL_ADDRESS, 'Invalid IPN', $listener->getTextReport());
+  /*
+  An Invalid IPN *may* be caused by a fraudulent transaction attempt. It's
+  a good idea to have a developer or sys admin manually investigate any 
+  invalid IPN.
+  */
+  lC_Order::process($_order_id, MODULE_PAYMENT_PAYPAL_ORDER_CANCELED_STATUS_ID);
+  $response_array['root']['transaction_response'] = 'INVALID';
+  @mail(MODULE_PAYMENT_PAYPAL_ID, 'Invalid IPN', $listener->getTextReport());
 }
 
+$lC_XML = new lC_XML($response_array);
+$Qtransaction = $lC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
+$Qtransaction->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
+$Qtransaction->bindInt(':orders_id', $_order_id);
+$Qtransaction->bindInt(':transaction_code', 1);
+$Qtransaction->bindValue(':transaction_return_value', $lC_XML->toXML());
+$Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($this->_transaction_response)) == 'VERIFIED') ? 1 : 0);
+$Qtransaction->execute();
 ?>
