@@ -284,12 +284,12 @@ class IpnListener {
     }
   }
   
-  function paymentStatus() {
+  public function paymentStatus() {
     return $this->post_data['payment_status'];
   }
      
 
-  function validPayment($amount,$currency) {
+  public function validPayment($amount,$currency) {
     $valid_payment = true;
     //check the payment currency and amount
     if ( ($this->post_data['mc_currency'] != $currency) || ($this->post_data['mc_gross'] != $amount) )
