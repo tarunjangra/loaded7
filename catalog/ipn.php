@@ -39,12 +39,9 @@ try {
 $response_array = array('root' => $_POST);
 $ipn_order_id = $_GET['ipn_order_id'];
 
-//$order = new lC_Order($ipn_order_id);
-//$amount = $order->info['total'];
-//$currency = $order->info['currency'];
-
-$amount = '100';
-$currency = 'USD';
+$order = new lC_Order($ipn_order_id);
+$amount = $order->info['total'];
+$currency = $order->info['currency'];
 
 /*
 The processIpn() method returned true if the IPN was "VERIFIED" and false if it
