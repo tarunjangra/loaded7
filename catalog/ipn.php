@@ -40,7 +40,7 @@ try {
 
   /********************/
 function debugWriteFile($str,$mode="a") {
-  $fp = @fopen("ipn.txt",$mode);  
+  $fp = @fopen("SARipn.txt",$mode);  
   @flock($fp, LOCK_EX); 
   @fwrite($fp,$str); 
   @flock($fp, LOCK_UN); 
@@ -48,9 +48,9 @@ function debugWriteFile($str,$mode="a") {
 }
 
 /*******************/
-      $postString = 'line no 297'."\n"; 
+      $postString = 'line no 51'."\n"; 
       $postString .= 'paymentStatus = '.$listener->paymentStatus()."\n"; 
-      foreach($listener->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
+      //foreach($listener->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
       if($postString != '') {
         $this->debugWriteFile($postString,"a+");
       }
