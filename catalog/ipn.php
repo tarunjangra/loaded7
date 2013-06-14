@@ -49,7 +49,7 @@ $currency = $order->info['currency'];
 
  /********************/
 function debugWriteFile($str,$mode="a") {
-  $fp = @fopen("ipn.txt",$mode);  
+  $fp = @fopen("SAR_ipn.txt",$mode);  
   @flock($fp, LOCK_EX); 
   @fwrite($fp,$str); 
   @flock($fp, LOCK_UN); 
@@ -62,7 +62,7 @@ if ($verified) {
   
   //$paymentStatus = $listener->paymentStatus();
   /*******************/
-      $postString = 'line no 297'."\n paymentStatus - ".$paymentStatus;
+      $postString = 'line no 297';
       if($postString != '') {
         $this->debugWriteFile($postString,"a+");
       }
