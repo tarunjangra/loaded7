@@ -45,23 +45,12 @@ $ipn_order_id = $_GET['ipn_order_id'];
 
 $order = new lC_Order($ipn_order_id);
 $amount = $order->info['total'];
-$currency = $order->info['currency'];
+$currency = $order->info['currency']; 
 
- /********************/
-$str = $listener->paymentStatus();
-  $fp = @fopen("SAR_ipn.txt",'w+');  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
-
-
-$paymentStatus = '111';
 //The processIpn() method returned true if the IPN was "VERIFIED" and false if it was "INVALID".
 if ($verified) {
   
-  //$paymentStatus = $listener->paymentStatus();
-
+  $paymentStatus = $listener->paymentStatus();
   // update order status
   switch ($paymentStatus ) {
     case 'Completed':
@@ -94,7 +83,7 @@ if ($verified) {
   $ipn_transaction_response = 'INVALID';
   @mail(MODULE_PAYMENT_PAYPAL_ID, 'Invalid IPN', $listener->getTextReport());
 }
-/*
+
 $lC_XML = new lC_XML($response_array);
 
 $Qtransaction = $lC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
@@ -104,5 +93,5 @@ $Qtransaction->bindInt(':transaction_code', 1);
 $Qtransaction->bindValue(':transaction_return_value', $lC_XML->toXML());
 $Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($ipn_transaction_response)) == 'VERIFIED') ? 1 : 0);
 $Qtransaction->execute();
-*/
+
 ?>
