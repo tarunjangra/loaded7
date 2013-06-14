@@ -247,9 +247,10 @@ class lC_Payment_paypal extends lC_Payment {
         ); 
     }
 
+    $_order_id = (isset($_SESSION['prepOrderID']) && $_SESSION['prepOrderID'] != NULL) ? end(explode('-', $_SESSION['prepOrderID'])) : 0;
     $return_href_link = lc_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true, true, true);
     $cancel_href_link = lc_href_link(FILENAME_CHECKOUT, 'cart', 'SSL', true, true, true);
-    $notify_href_link = lc_href_link('ipn.php', null, 'SSL', true, true, true);
+    $notify_href_link = lc_href_link('ipn.php', 'order_id='.$_order_id, 'SSL', true, true, true);
     $signature = $this->setTransactionID($amount);
 
     $paypal_standard_params = array(
