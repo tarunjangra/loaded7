@@ -119,7 +119,7 @@ $v = $lC_XML->toXML();
   }
 /*********************/
 
-/*
+
 $Qtransaction = $lC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
 $Qtransaction->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
 $Qtransaction->bindInt(':orders_id', $ipn_order_id);
@@ -127,5 +127,5 @@ $Qtransaction->bindInt(':transaction_code', 1);
 $Qtransaction->bindValue(':transaction_return_value', $lC_XML->toXML());
 $Qtransaction->bindInt(':transaction_return_status', (strtoupper(trim($this->_transaction_response)) == 'VERIFIED') ? 1 : 0);
 $Qtransaction->execute();
-*/
+
 ?>
