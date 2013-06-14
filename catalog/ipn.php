@@ -54,47 +54,22 @@ if ($verified) {
   // update order status
   switch ($paymentStatus ) {
     case 'Completed':
-
       //Check that $_POST['payment_amount'] and $_POST['payment_currency'] are correct
       if($listener->validPayment($amount,$currency)) {      
         $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_DEFAULT_STATUS_ID;
       } else {
         $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID;
       }
-      $str = '$_order_status : '.$_order_status;
-      $fp = @fopen("ipn_1.txt",'w+');  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
       break;
     case 'Pending':       
     case 'Failed':
       $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_ONHOLD_STATUS_ID;
-    $str = '$_order_status : '.$_order_status;
-      $fp = @fopen("ipn_2.txt",'w+');  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
       break;
     case 'Denied':
       $_order_status = MODULE_PAYMENT_PAYPAL_ORDER_CANCELED_STATUS_ID;
-    $str = '$_order_status : '.$_order_status;
-      $fp = @fopen("ipn_3.txt",'w+');  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
       break;
     default:
       $_order_status = MODULE_PAYMENT_PAYPAL_PROCESSING_STATUS_ID;
-    $str = '$_order_status : '.$_order_status;
-      $fp = @fopen("ipn_4.txt",'w+');  
-  @flock($fp, LOCK_EX); 
-  @fwrite($fp,$str); 
-  @flock($fp, LOCK_UN); 
-  @fclose($fp);
   }
   lC_Order::process($_order_id, $_order_status);
   $response_array['root']['transaction_response'] = 'VERIFIED';
