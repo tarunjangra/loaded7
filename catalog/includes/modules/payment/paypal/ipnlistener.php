@@ -59,7 +59,6 @@ class IpnListener {
   private $response = '';
 
   public  $key = array();
-  public  $uniqueTxnID = false;
 
   const PAYPAL_HOST = 'www.paypal.com';
   const SANDBOX_HOST = 'www.sandbox.paypal.com';
@@ -292,12 +291,10 @@ class IpnListener {
     if(!empty($statusName)) {
       return ($this->key['payment_status'] == $statusName);
     }
-
     return $this->key['payment_status'];
   }
 
   function validPayment($amount,$currency) {
-
     $valid_payment = true;
     //check the payment currency and amount
     if ( ($this->key['mc_currency'] != $currency) || ($this->key['mc_gross'] != $amount) )
@@ -305,6 +302,5 @@ class IpnListener {
     
     return $valid_payment;
   }
-
 }
 ?>
