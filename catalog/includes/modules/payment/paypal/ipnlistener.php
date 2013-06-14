@@ -58,8 +58,6 @@ class IpnListener {
   private $response_status = '';
   private $response = '';
 
-  public  $key = array();
-
   const PAYPAL_HOST = 'www.paypal.com';
   const SANDBOX_HOST = 'www.sandbox.paypal.com';
   
@@ -252,7 +250,6 @@ class IpnListener {
       $this->post_data = $post_data;
 
       foreach ($this->post_data as $key => $value) {
-        $this->key[$key] = $value;
         $encoded_data .= "&$key=".urlencode($value);
       }
     }
@@ -287,17 +284,35 @@ class IpnListener {
     }
   }
   
-  function paymentStatus($statusName = '') {
-    if(!empty($statusName)) {
-      return ($this->key['payment_status'] == $statusName);
-    }
-    return $this->key['payment_status'];
+  function paymentStatus() {    
+
+/*******************/
+      $postString = 'line no 297'."\n"; 
+      $postString .= 'paymentStatus = '.$listener->paymentStatus()."\n"; 
+      foreach($this->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
+      if($postString != '') {
+        $this->debugWriteFile($postString,"a+");
+      }
+     /*******************/
+
+
+    return $this->post_data['payment_status'];
   }
+
+      /********************/
+function debugWriteFile($str,$mode="a") {
+  $fp = @fopen("SAR_ipn.txt",$mode);  
+  @flock($fp, LOCK_EX); 
+  @fwrite($fp,$str); 
+  @flock($fp, LOCK_UN); 
+  @fclose($fp);
+}
+
 
   function validPayment($amount,$currency) {
     $valid_payment = true;
     //check the payment currency and amount
-    if ( ($this->key['mc_currency'] != $currency) || ($this->key['mc_gross'] != $amount) )
+    if ( ($this->post_data['mc_currency'] != $currency) || ($this->post_data['mc_gross'] != $amount) )
       $valid_payment = false;
     
     return $valid_payment;
