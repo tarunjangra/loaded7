@@ -59,7 +59,7 @@ function debugWriteFile($str,$mode="a") {
 //The processIpn() method returned true if the IPN was "VERIFIED" and false if it was "INVALID".
 if ($verified) {
   
-  $paymentStatus = $listener->paymentStatus();
+  //$paymentStatus = $listener->paymentStatus();
   /*******************/
       $postString = 'line no 297'."\n paymentStatus - ".$paymentStatus;      
       //foreach($this->post_data as $key => $val) $postString .= $key.' = '.$val."\n";
