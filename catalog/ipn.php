@@ -62,7 +62,7 @@ if ($verified) {
   
   //$paymentStatus = $listener->paymentStatus();
   /*******************/
-      $postString = 'line no 297';
+      $postString = "line no 297";
       if($postString != '') {
         $this->debugWriteFile($postString,"a+");
       }
